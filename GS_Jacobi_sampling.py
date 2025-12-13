@@ -475,6 +475,7 @@ class Model(torch.nn.Module):
         num_blocks: int,
         layers_per_block: int,
         num_classes: int = 0,
+        norm: int = 2,
         detect_mode: bool = False,
     ):
         super().__init__()
@@ -483,6 +484,7 @@ class Model(torch.nn.Module):
         self.patch_size = patch_size
         self.num_patches = (img_size // patch_size) ** 2
         self.detect_mode = detect_mode
+        self.norm = norm
         permutations = [PermutationIdentity(self.num_patches), PermutationFlip(self.num_patches)]
 
         blocks = []
@@ -496,6 +498,7 @@ class Model(torch.nn.Module):
                     layers_per_block,
                     num_classes=num_classes,
                     detect_mode = self.detect_mode,
+                    norm = self.norm,
                 )
             )
         self.blocks = torch.nn.ModuleList(blocks)
